@@ -1,5 +1,5 @@
-from param.base_param import BaseParam
-from config import *
+from dubhe_sdk.param.base_param import BaseParam
+from dubhe_sdk.config import *
 
 
 class TrainParam(BaseParam):

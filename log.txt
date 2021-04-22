@@ -1,0 +1,22 @@
+[2021-04-02 16:43:52,078] [config.py:14]	INFO: **************config.py*****************
+[2021-04-02 16:43:52,079] [config.py:23]	INFO: Manual Started Algoritm!
+[2021-04-02 16:43:52,080] [config.py:26]	INFO: PORT 8030 
+[2021-04-02 16:43:52,080] [config.py:38]	INFO: no INSTANCE_ID,use http://127.0.0.1:8030/heart 
+[2021-04-02 16:43:52,080] [config.py:43]	INFO: BOOTSTRAP_SERVERS 127.0.0.1:9092 
+[2021-04-02 16:43:52,081] [config.py:57]	INFO: no TOPIC_MODEL_STATUS, use default alg_model_progress 
+[2021-04-02 16:43:52,081] [config.py:64]	INFO: no TOPIC_MODEL_RESULT, use default als_model_result 
+[2021-04-02 16:43:52,083] [config.py:71]	INFO: no INSTANCE_ID, use 8d0ad664-938f-11eb-96bb-f8e4e351e789 
+[2021-04-02 16:43:52,083] [config.py:74]	INFO: RELY_MODEL_DATA {
+"detector": {
+"alg_type": "目标检测",
+"alg_version": "v1.0",
+"model_path": "/temporary/debug/model_20210220164439644_4_0.40.pb",
+"model_version": "v7.0"
+	},
+"classify": {
+"alg_type": "目标检测",
+"alg_version": "v1.0",
+"model_path": "/temporary/debug/model_20210220164226924_3_3.55.pb",
+"model_version": "v7.0"
+}
+} 

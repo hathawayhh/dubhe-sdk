@@ -7,7 +7,7 @@
 import os
 import uuid
 import json
-from pipeline.Logger import ADCLog
+from dubhe_sdk.pipeline.Logger import ADCLog
 
 isDEBUG = False
 logger = ADCLog.getMainLogger()

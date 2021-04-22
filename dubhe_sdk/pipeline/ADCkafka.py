@@ -1,7 +1,7 @@
 
 from kafka import KafkaProducer
 import json
-from config import *
+from dubhe_sdk.config import *
 import uuid
 import time
 import datetime

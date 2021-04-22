@@ -1,6 +1,6 @@
 import time
 import json
-from pipeline.Logger import ADCLog
+from dubhe_sdk.pipeline.Logger import ADCLog
 logger = ADCLog.getMainLogger()
 
 # 获取时间戳；

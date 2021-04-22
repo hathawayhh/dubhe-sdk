@@ -1,11 +1,11 @@
 
 # import time
-from pipeline.ADCkafka import *
+from dubhe_sdk.pipeline.ADCkafka import *
 import urllib.request as request
 # send pretending msg
-from pipeline.Logger import ADCLog
+from dubhe_sdk.pipeline.Logger import ADCLog
 import socket
-from config import *
+from dubhe_sdk.config import *
 
 
 logger = ADCLog.getMainLogger()

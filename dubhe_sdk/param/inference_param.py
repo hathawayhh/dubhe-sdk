@@ -1,16 +1,20 @@
-from param.base_param import BaseParam
-from config import *
+from dubhe_sdk.param.base_param import BaseParam
+from dubhe_sdk.config import *
 
 
-class TrainParam(BaseParam):
+class InferenceParam(BaseParam):
     # 请求类型：1.离线预测 2.离线评估 3.在线推理
-    req_type = 2
+    req_type = 3
     # 实例ID
     instance_id = INSTANCE_ID
-    # 多个数据集路径
-    data_paths = []
+    # 图片路径
+    image_base_dir = ''
+    # 图片名称
+    image_names = []
     # 模型文件路径
     model_path = ''
+    # 唯一的请求ID
+    request_number = 0
     # 依赖其他模型路径
     rely_model_data = RELY_MODEL_DATA
     # 资源模式：0.CPU模式  1.GPU模式

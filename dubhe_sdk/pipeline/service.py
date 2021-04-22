@@ -9,9 +9,9 @@ rootPath = os.path.split(curPath)[0]
 print(rootPath)
 sys.path.insert(0, rootPath)
 # logger.info(os.environ)
-from pipeline.Logger import ADCLog
-from config import *
-from pipeline.ADCkafka import *
+from dubhe_sdk.pipeline.Logger import ADCLog
+from dubhe_sdk.config import *
+from dubhe_sdk.pipeline.ADCkafka import *
 import traceback
 
 logger = ADCLog.getMainLogger()
@@ -42,15 +42,14 @@ class Model:
         self.OUTPUT_DIR = 'output' # 模型输出
         self.localDirs = [
             os.path.join(self.TEMP_DIR, '%s_%s' % (self.name, self.instance_id), 'dataset'),
-            os.path.join(self.TEMP_DIR, '%s_%s' % (self.name, self.instance_id), 'models'),
             os.path.join(self.TEMP_DIR, '%s_%s' % (self.name, self.instance_id), 'results'),
-            os.path.join(self.TEMP_DIR, '%s_%s' % (self.name, self.instance_id), 'logs')]
+            os.path.join(self.TEMP_DIR, '%s_%s' % (self.name, self.instance_id), 'logs'),
+            os.path.join(self.OUTPUT_DIR, 'models')]
 
         self.datasetDir = self.localDirs[0]
-        self.modelFileDir = self.localDirs[1]
-        self.resultDir = self.localDirs[2]
-        self.logsDir = self.localDirs[3]
-        self.outputModelDir = os.path.join(self.OUTPUT_DIR, 'models')
+        self.resultDir = self.localDirs[1]
+        self.logsDir = self.localDirs[2]
+        self.outputModelDir = self.localDirs[2]
 
     def config_dict_replace(self, params, config_params):
         """replace dict config_params to dict params"""
