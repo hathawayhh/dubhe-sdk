@@ -1,4 +1,5 @@
 {
+    "model": "resnet18",
     "evaluation_interval": 1,
     "epochs": 2,
     "batch_size": 4,

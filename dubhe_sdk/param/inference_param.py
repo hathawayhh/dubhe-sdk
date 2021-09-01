@@ -12,7 +12,7 @@ class InferenceParam(BaseParam):
     # 图片名称
     image_names = []
     # 模型文件路径
-    model_path = ''
+    model_path = model_path
     # 唯一的请求ID
     request_number = 0
     # 依赖其他模型路径
@@ -24,7 +24,7 @@ class InferenceParam(BaseParam):
         "CUDA_VISIBLE_DEVICES": "0"  # None, 0, 1, 2, 3
     }
     # 业务参数
-    special_params = SPECIAL_PARAMS
+    special_params = special_params
     # 中间结果目录
     BASE_DIR = '/temporary/debug'
     # 模型输出目录

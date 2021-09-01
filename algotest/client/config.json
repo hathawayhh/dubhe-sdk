@@ -1,0 +1,12 @@
+{
+    "host" : "localhost",
+    "port": 8030,
+    "BOOTSTRAP_SERVERS": "127.0.0.1:9092",
+    "TOPIC_MODEL_STATUS": "alg_model_progress",
+    "TOPIC_MODEL_RESULT": "als_model_result",
+    "dir" : "nas/5350",
+    "code": "*",
+    "batch" : 50,
+    "threshold" : 0.3,
+    "saveJson" : true
+}

@@ -1,0 +1,13 @@
+{
+    "req_type":1,
+    "instance_id":"modelid1412-algorithm112345540-train-1412-4",
+    "data_paths": [
+        "data"
+    ],
+    "code_list": [],
+    "split_rate": 0.6,
+    "resource_type": 1,
+    "resource_allocation":{
+        "CUDA_VISIBLE_DEVICES": "0"
+    }
+}

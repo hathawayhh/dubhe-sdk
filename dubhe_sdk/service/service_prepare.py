@@ -1,23 +1,14 @@
-
 # import time
-from dubhe_sdk.pipeline.ADCkafka import *
+from dubhe_sdk.service.ADCkafka import *
 import urllib.request as request
 # send pretending msg
-from dubhe_sdk.pipeline.Logger import ADCLog
 import socket
 from dubhe_sdk.config import *
 
+from dubhe_sdk.service.Logger import Logger
+logger = Logger.instance()
 
-logger = ADCLog.getMainLogger()
 
-def taskType():
-    curType = INSTANCE_ID.split('-')[1]
-    if curType == PREFIX_TRAIN:
-        return TASK_TRAIN_TYPE
-    elif curType == PREFIX_PREDICT:
-        return TASK_PREDICT_TYPE
-    else:
-        return -1
 
 
 def serviceCheck(dict_params):
@@ -38,7 +29,7 @@ def serverIsReady():
     if KAFKA_ENABLE:
         print("prepara ready flag.")
         ready_json = model_ready_data()
-        send_kafka(MES_PREDICT_READY, ready_json, TOPIC_MODEL_STATUS)
+        send_kafka(MODEL_READY, ready_json, TOPIC_MODEL_STATUS)
         print("ready send success!")
 
 
@@ -52,7 +43,8 @@ def open_browser():
         except Exception as e:
             print(e)
             time.sleep(0.5)
-    serverIsReady()
+    if (PLATFORM_TYPE == AI_PLATFORM):
+        serverIsReady()
     logger.info('server started !')
 
 def connect_tcp(host, port):
@@ -68,7 +60,8 @@ def connect_tcp(host, port):
         except Exception as e:
             print(e)
             time.sleep(1)
-    serverIsReady()
+    if (PLATFORM_TYPE == AI_PLATFORM):
+        serverIsReady()
     logger.info('server started !')
 
 

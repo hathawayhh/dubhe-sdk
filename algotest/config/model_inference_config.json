@@ -1,0 +1,5 @@
+{
+  "model": "resnet18",
+  "batch_size": 4,
+  "Gechuang_aimidware_model_base_or_full_name": "classification_model"
+}

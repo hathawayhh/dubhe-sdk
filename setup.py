@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(name='dubhe_sdk',
-      version="0.17",
+      version="2.0",
       description='TCL AI platform, algorithm software development kit',
       long_description='TCL AI platform, algorithm software development kit',
       classifiers=[],

@@ -1,0 +1,4 @@
+{
+    "model": "resnet18",
+    "batch_size": 4
+}

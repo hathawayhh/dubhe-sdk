@@ -116,38 +116,31 @@ def predict_exception_end_data(exceptionMSG):
     return data
 
 # 模型进度信息
-def train_progress_data(progress, epoch, loss, lr, acc, recall=-1, iou=-1):
+def train_progress_data(progress, epoch, metrics=dict()):
     """
     {
         "progress": 0.2 # 0-1 float ,
         "epoch": 0 # 0 - total epochs,
-        "loss": 1.1 # float,
-        "lr": 0.001 # float ,
-        "iou": # float,
-        "acc": 0.5 # 0-1 float,
-        "recall": 0.5 # 0-1 float
+        "metrics": {
+                "loss": 1.1 # float,
+                "lr": 0.001 # float ,
+                "iou": # float,
+                "acc": 0.5 # 0-1 float,
+                "recall": 0.5 # 0-1 float
+            } # float,
 	}
     :param progress:
     :param epoch:
-    :param loss:
-    :param lr:
-    :param iou:
-    :param acc:
-    :param recall:
+    :param metrics:
     :return:
     """
 
-    data = {}
+    data = metrics
     data['progress'] = progress
     data['epoch'] = epoch
-    data['loss'] = loss
-    data['lr'] = lr
-    data['acc'] = acc
-    data['recall'] = recall
-    data['iou'] = iou
     return data
 
-def predict_process_data(progress):
+def predict_progress_data(progress):
     """
     {
         "progress": 0.2 # 0-1 float ,
@@ -181,7 +174,7 @@ def predict_classify_details(img_path, ground_true, predict_code, conf):
     result['info'] = data_list
     return [result]
 
-def predict_detector_details(img_path, pre_img, ground_true, predict_code, conf, position):
+def predict_details(img_path, ground_true, predict_code, conf, shape_type=None,position=None,special=None):
     """
 	{
 		"img_path": "img_full_path"  ,
@@ -193,7 +186,12 @@ def predict_detector_details(img_path, pre_img, ground_true, predict_code, conf,
     :return:
     """
     data_list = []
-    if len(position)>0:
+    if not position:
+        data = {}
+        data['ground_true'] = ground_true
+        data['predict_code'] = predict_code
+        data['conf'] = conf
+    elif len(position) > 0:
         for pos in position:
             (x1, y1, x2, y2, boxconf) = pos
             data = {}
@@ -202,23 +200,26 @@ def predict_detector_details(img_path, pre_img, ground_true, predict_code, conf,
             data['conf'] = conf
             if conf<0:
                 data['conf'] = boxconf
-            data['shape_type'] = 'rectangle'
+            data['shape_type'] = shape_type
             data['position'] = [[x1,y1], [x2,y2]]
+            data['special'] = special
             data_list.append(data)
     else:
         data = {}
-        data['pre_img'] = pre_img
         data['ground_true'] = ground_true
         data['predict_code'] = predict_code
         data['conf'] = conf
         if conf < 0:
             data['conf'] = 1
-        data['shape_type'] = 'rectangle'
+        data['shape_type'] = shape_type
         data['position'] = []
-        data_list.append(data)
+        data['special'] = special
+
+    data_list.append(data)
     result = {}
     result['img_path'] = img_path
-    result['bbox_cnt'] = len(position)
+    if position:
+        result['bbox_cnt'] = len(position)
     result['info'] = data_list
     return [result]
 
@@ -247,6 +248,7 @@ def send_kafka(mes_type, data, topic=topic_name1, local_backup='json.dat'):
             producer = KafkaProducer(bootstrap_servers=BOOTSTRAP_SERVERS,
                                      value_serializer=lambda m: json.dumps(m).encode('utf-8'))
             producer.send(topic, value=msg)
+            producer.close()
         except Exception as e:
             print(msg)
             print(e)

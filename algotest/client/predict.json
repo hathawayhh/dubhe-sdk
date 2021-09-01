@@ -1,0 +1,11 @@
+{
+    "req_type":2,
+    "instance_id":"forecastid323-algorithm154146065-forecast-323-4",
+    "data_paths": [
+        "data"
+    ],
+    "resource_type": 1,
+    "resource_allocation":{
+        "CUDA_VISIBLE_DEVICES": "0"
+    }
+}

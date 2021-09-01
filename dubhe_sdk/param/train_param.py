@@ -11,8 +11,10 @@ class TrainParam(BaseParam):
     data_paths = []
     # 训练类别
     code_list = []
+    # 1：占比   2：指定验证集
+    verify_way = 1
     # 验证集占比
-    split_rate = 0.2
+    split_rate = 0.1
     # 依赖其他模型路径
     rely_model_data = RELY_MODEL_DATA
     # 资源类型：0.CPU模式  1.GPU模式
@@ -22,12 +24,8 @@ class TrainParam(BaseParam):
         "CUDA_VISIBLE_DEVICES": "0"  # None, 0, 1, 2, 3
     }
     # 业务参数
-    special_params = SPECIAL_PARAMS
+    special_params = special_params
     # 预训练模型路径
     pretrained_model_path = ""
     # 标识断点训练的epoch值，默认0
     pretrained_epoch = 0
-    # 中间结果目录
-    BASE_DIR = '/temporary/debug'
-    # 模型输出目录
-    OUTPUT_DIR = 'output'

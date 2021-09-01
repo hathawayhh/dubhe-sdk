@@ -1,37 +1,62 @@
 import os
 import sys
 
-# curPath = os.path.abspath(os.path.dirname(__file__))
-# print(curPath)
-# sys.path.insert(0, curPath)
 from flask import Flask, jsonify, request as flask_request
 from concurrent.futures import ThreadPoolExecutor
 from dubhe_sdk.config import *
-from dubhe_sdk.pipeline.service import Model
 import json
-from dubhe_sdk.pipeline.Logger import ADCLog
-logger = ADCLog.getMainLogger()
+from dubhe_sdk.service.Logger import Logger
+logger = Logger.instance()
+from dubhe_sdk.service.service_prepare import *
+import traceback
 
 executor = ThreadPoolExecutor(10)
 app = Flask(__name__)
-from dubhe_sdk.pipeline.service_prepare import *
-from dubhe_sdk.pipeline.service_prepare import open_browser
-executor.submit(open_browser)
-from dubhe_sdk.param.train_param import TrainParam
-from dubhe_sdk.param.predict_param import PredictParam
-from dubhe_sdk.param.inference_param import InferenceParam
-
 
 model = {}
 
-def set_model(name, value):
-    model[name] = value
-
-def get_model(name, defValue=None):
+def getModel(name="entrance_func", defValue=None):
     try:
         return model[name]
     except KeyError:
         return defValue
+
+def setModel(name="entrance_func", value=None):
+    model[name] = value
+
+def task_run(dict_params):
+
+    try:
+        data = None
+        service_type, func, ctxb = getModel()
+        assert service_type == dict_params['req_type'], "pod service_type are different from req_type!"
+
+        # send start to kafka
+        if dict_params['req_type'] != TASK_INFERENCE_TYPE and PLATFORM_TYPE == AI_PLATFORM:
+            start_json = train_start_data()
+            send_kafka(MODEL_STATUS, start_json, TOPIC_MODEL_STATUS)
+
+        # set gpu id
+        resource_allocation = dict_params['resource_allocation']
+        os.environ['CUDA_VISIBLE_DEVICES'] = resource_allocation['CUDA_VISIBLE_DEVICES']
+
+        ctx = ctxb.setInputParam(dict_params).build()
+        data = func(ctx)
+
+        # send end to kafka
+        if dict_params['req_type'] != TASK_INFERENCE_TYPE and PLATFORM_TYPE == AI_PLATFORM:
+            end_json = train_end_data()
+            send_kafka(MODEL_STATUS, end_json, TOPIC_MODEL_STATUS)
+
+    except Exception as ex:
+        traceback.print_exc()
+        exceptionMSG = traceback.format_exc()
+        if dict_params['req_type'] != TASK_INFERENCE_TYPE and PLATFORM_TYPE == AI_PLATFORM:
+            end_json = train_exception_end_data('%s current model error %s' % (INSTANCE_ID, ex))
+            send_kafka(MODEL_STATUS, end_json, TOPIC_MODEL_STATUS)
+        logger.error(exceptionMSG)
+    finally:
+        return data
 
 # region 0. heart detection
 @app.route('/heart', methods=['GET', 'POST'])
@@ -53,8 +78,16 @@ def train():
     else:
         dict_params = json.loads(params)
     print('/train/start %s\n' % dict_params)
+    # instance_id check
+    if dict_params['instance_id'] != INSTANCE_ID:
+        res = {
+            "flag": 2,
+            "message": "param error: instance_id [{}] of request different from ENV INSTANCE_ID [{}]!"
+            .format(dict_params['instance_id'], INSTANCE_ID)
+        }
+        return jsonify(res)
 
-    get_model('name').train(dict_params)
+    executor.submit(task_run, dict_params)
     res = {
             "flag":1,
             "message": "model train starting now"
@@ -73,7 +106,16 @@ def predict_batch():
         dict_params = json.loads(params)
     print('/predict/batch %s\n' % dict_params)
 
-    executor.submit(model.predict, dict_params)
+    # instance_id check
+    if dict_params['instance_id'] != INSTANCE_ID:
+        res = {
+            "flag": 2,
+            "message": "param error: instance_id [{}] of request different from ENV INSTANCE_ID [{}]!"
+                .format(dict_params['instance_id'], INSTANCE_ID)
+        }
+        return jsonify(res)
+
+    executor.submit(task_run, dict_params)
     res = {
             "flag":1,
             "message": "model predict starting now"
@@ -91,8 +133,24 @@ def predict_multiple():
     else:
         dict_params = json.loads(params)
     print('/predict/multiple %s\n' % dict_params)
-    res = model.inference(dict_params)
-    logger.info("response:{}".format(res))
+
+    # instance_id check
+    if dict_params['instance_id'] != INSTANCE_ID:
+        res = {
+            "flag": 2,
+            "message": "param error: instance_id [{}] of request different from ENV INSTANCE_ID [{}]!"
+                .format(dict_params['instance_id'], INSTANCE_ID)
+        }
+        return jsonify(res)
+
+    data = task_run(dict_params)
+    res = {
+        "flag": 1,
+        "message": "model inference success",
+        "data": data
+    }
+
+    logger.info("response:{}".format(json.dumps(res, indent=4)))
     return jsonify(res)
 # endregion
 
