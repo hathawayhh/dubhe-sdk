@@ -45,7 +45,7 @@ def image_run():
                 user_func = function.__get__(Model)
                 model_infos = (func_type, user_func, ctxb)
 
-                if 'protocol' in os.environ and int(os.environ['protocol']) == "http":
+                if 'protocol' in os.environ and str(os.environ['protocol']) == "http":
                     # HTTP通信方式
                     from dubhe_sdk.http_server import app, setModel
                     setModel(value=model_infos)

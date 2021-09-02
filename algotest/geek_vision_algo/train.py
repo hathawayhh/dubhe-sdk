@@ -91,7 +91,7 @@ def main(argv, train_set, test_set, ctx):
             progress = ((batch_idx + 1) / len(train_loader) + epoch)*args.progress_ratio / args.epochs
             Metrics = dict()
             Metrics['loss'] = round(loss.item(), 6)
-            Metrics['accuracy'] = train_acc
+            Metrics['acc'] = train_acc
             ctx.logProgressByBatch(epoch, batch_idx, len(train_loader), progress, Metrics)
 
         if epoch % args.evaluation_interval == 0 or epoch == args.epochs-1:

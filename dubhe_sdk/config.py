@@ -17,7 +17,7 @@ logger.info('**************config.py*****************')
 
 DEFAULT_TOPIC_MODEL_STATUS = 'alg_model_progress'
 DEFAULT_TOPIC_MODEL_RESULT = 'als_model_result'
-IP = "127.0.0.1"
+IP = "0.0.0.0"
 # kafka配置
 KAFKA_ENABLE = True
 THREADED = True
@@ -72,8 +72,9 @@ else:
     logger.info('Manual Started Algoritm!')
     logger.info('---------------DEFAULT------------------')
     PLATFORM_TYPE = DEBUG_PLATFORM
+    IP = "127.0.0.1"
     PORT = 8030
-    logger.info('Default PORT, use %d' % PORT)
+    logger.info('Default IP: %s, PORT: %d' %(IP,PORT))
 
     # BOOTSTRAP_SERVERS = ['192.168.7.114:9092', '192.168.7.113:9092']
     BOOTSTRAP_SERVERS = '127.0.0.1:9092'
@@ -85,9 +86,9 @@ else:
     TOPIC_MODEL_RESULT = DEFAULT_TOPIC_MODEL_RESULT
     logger.info('Default TOPIC_MODEL_RESULT, use default %s ' % TOPIC_MODEL_RESULT)
 
-    # INSTANCE_ID = "modelid1412-algorithm112345540-train-1412-4"
+    INSTANCE_ID = "modelid1412-algorithm112345540-train-1412-4"
     # INSTANCE_ID = "forecastid323-algorithm154146065-forecast-323-4"
-    INSTANCE_ID = "taskid14-application203913747-inference-14"
+    # INSTANCE_ID = "taskid14-application203913747-inference-14"
     logger.info('Default INSTANCE_ID, use %s ' % INSTANCE_ID)
 
     INDEX_URL = "http://127.0.0.1:%d/heart" % PORT
@@ -108,14 +109,14 @@ else:
     #     }
     # }
 
-    RELY_MODEL_DATA = {
-        "unet": {
-            "alg_type": "目标检测",
-            "alg_version": "v1.0",
-            "model_path": "./ckpts/Unet_se_resnext50_32x4d_lowest_loss.pth",
-            "model_version": "v7.0"
-        }
-    }
+    # RELY_MODEL_DATA = {
+    #     "unet": {
+    #         "alg_type": "目标检测",
+    #         "alg_version": "v1.0",
+    #         "model_path": "./ckpts/Unet_se_resnext50_32x4d_lowest_loss.pth",
+    #         "model_version": "v7.0"
+    #     }
+    # }
 
     RELY_MODEL_DATA = {
         "classification_model": {
@@ -134,7 +135,6 @@ else:
     }
     # model_path = None
     model_path = "./output/models/model_20210830140750571_1_0.00.pth"
-
 
 
     logger.info('---------------DEFAULT------------------')

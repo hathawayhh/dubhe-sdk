@@ -32,4 +32,8 @@ class Logger(object):
             streamHandler.close()
             log_file_handler.close()
 
+            # 过滤kafka INFO级别日志
+            kafka_logger = logging.getLogger('kafka')
+            kafka_logger.setLevel(logging.WARNING)
+
         return cls.logger

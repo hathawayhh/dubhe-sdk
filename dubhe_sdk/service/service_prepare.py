@@ -9,8 +9,6 @@ from dubhe_sdk.service.Logger import Logger
 logger = Logger.instance()
 
 
-
-
 def serviceCheck(dict_params):
 
     # 1:gpu , 0:cpu

@@ -197,7 +197,6 @@ class Predict_Model():
             normalize,
         ])
 
-        # split train and test
         prepare_data_args = [
             "--data_paths",
             *self.data_paths,
@@ -205,7 +204,7 @@ class Predict_Model():
             '--predict_method=predict',
         ]
         prepare_data(prepare_data_args)
-        df_test = pd.read_csv(os.path.join(self.debug_dir, "train.csv"))
+        df_test = pd.read_csv(os.path.join(self.debug_dir, "test.csv"))
         code2label = {}
         for idx, code in enumerate(self.code_list):
             code2label[code] = idx

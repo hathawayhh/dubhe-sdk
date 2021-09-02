@@ -39,12 +39,12 @@ class client():
         self.BOOTSTRAP_SERVERS = config['BOOTSTRAP_SERVERS']
         self.TOPIC_MODEL_STATUS = config['TOPIC_MODEL_STATUS']
         self.TOPIC_MODEL_RESULT = config['TOPIC_MODEL_RESULT']
-        self.train_request = load_config("inference.json")
+        self.request = load_config("train.json")
 
     def send(self):
 
-        if self.train_request:
-            jmsg = json.dumps(self.train_request)
+        if self.request:
+            jmsg = json.dumps(self.request)
             try:
                 # 创建Client并连接
                 tcp_client = socket(AF_INET, SOCK_STREAM)
