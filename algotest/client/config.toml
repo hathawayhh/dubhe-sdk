@@ -1,0 +1,8 @@
+host = "localhost"
+port = 8030
+dir = "/data"
+code = "*"
+batch = 50
+threshold = 0.3
+req_type = 2 # 0:heart 1:train 2:predict 3:inference
+

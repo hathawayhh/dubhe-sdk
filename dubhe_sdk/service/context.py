@@ -129,6 +129,7 @@ class ContextBuilder(object):
         self.ctx = Context(logger)
 
     def setInputParam(self, dict_params: dict):
+        self.ctx.json_request = dict_params
         # 模型输出目录
         OUTPUT_MODEL_DIR = 'output/models'
         if dict_params['req_type'] == TASK_TRAIN_TYPE:

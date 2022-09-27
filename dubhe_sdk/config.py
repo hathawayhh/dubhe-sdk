@@ -33,6 +33,9 @@ if 'PLATFORM_TYPE' in os.environ and int(os.environ['PLATFORM_TYPE']) == AI_PLAT
     logger.info('---------------ENV------------------')
     PLATFORM_TYPE = AI_PLATFORM
 
+    os.environ["CUDA_VISIBLE_DEVICES"] = '0'# 平台分配给算法仅0卡可见
+    logger.info('CUDA_VISIBLE_DEVICES SET 0')
+
     PORT = int(os.environ['PORT'])
     logger.info('PORT %s ' % os.environ['PORT'])
 
@@ -72,7 +75,7 @@ else:
     logger.info('Manual Started Algoritm!')
     logger.info('---------------DEFAULT------------------')
     PLATFORM_TYPE = DEBUG_PLATFORM
-    IP = "127.0.0.1"
+    IP = "0.0.0.0"
     PORT = 8030
     logger.info('Default IP: %s, PORT: %d' %(IP,PORT))
 
@@ -88,7 +91,7 @@ else:
 
     INSTANCE_ID = "modelid1412-algorithm112345540-train-1412-4"
     # INSTANCE_ID = "forecastid323-algorithm154146065-forecast-323-4"
-    # INSTANCE_ID = "taskid14-application203913747-inference-14"
+    # INSTANCE_ID = "kdtask14-application203913747-kdtask-14"
     logger.info('Default INSTANCE_ID, use %s ' % INSTANCE_ID)
 
     INDEX_URL = "http://127.0.0.1:%d/heart" % PORT
@@ -154,6 +157,8 @@ PREFIX_TRAIN = 'train'
 PREFIX_PREDICT = 'forecast'
 PREFIX_INFERENCE = 'inference'
 PREFIX_AUTOMARK = 'automark'
+PREFIX_REPLAY = 'replay'
+PREFIX_KDTASK = 'kdtask'
 
 # task type
 TASK_TRAIN_TYPE = 1
@@ -164,7 +169,8 @@ if INSTANCE_ID.split('-')[2] == PREFIX_TRAIN:
     TASK_TYPE = TASK_TRAIN_TYPE
 elif INSTANCE_ID.split('-')[2] == PREFIX_PREDICT:
     TASK_TYPE =  TASK_PREDICT_TYPE
-elif INSTANCE_ID.split('-')[2] == PREFIX_INFERENCE or INSTANCE_ID.split('-')[2] == PREFIX_AUTOMARK:
+elif INSTANCE_ID.split('-')[2] == PREFIX_INFERENCE or INSTANCE_ID.split('-')[2] == PREFIX_AUTOMARK \
+        or INSTANCE_ID.split('-')[2] == PREFIX_REPLAY or INSTANCE_ID.split('-')[2] == PREFIX_KDTASK:
     TASK_TYPE =  TASK_INFERENCE_TYPE
 else:
     logger.error("TASK %s PREFIX not defined!"%INSTANCE_ID.split('-')[2])

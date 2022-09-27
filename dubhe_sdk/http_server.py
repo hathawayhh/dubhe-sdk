@@ -37,8 +37,11 @@ def task_run(dict_params):
             send_kafka(MODEL_STATUS, start_json, TOPIC_MODEL_STATUS)
 
         # set gpu id
-        resource_allocation = dict_params['resource_allocation']
-        os.environ['CUDA_VISIBLE_DEVICES'] = resource_allocation['CUDA_VISIBLE_DEVICES']
+        resource_allocation = dict_params.get('resource_allocation', -1)
+        if resource_allocation == -1:
+            os.environ['CUDA_VISIBLE_DEVICES'] = "0"
+        else:
+            os.environ['CUDA_VISIBLE_DEVICES'] = resource_allocation['CUDA_VISIBLE_DEVICES']
 
         ctx = ctxb.setInputParam(dict_params).build()
         data = func(ctx)
@@ -79,13 +82,14 @@ def train():
         dict_params = json.loads(params)
     print('/train/start %s\n' % dict_params)
     # instance_id check
-    if dict_params['instance_id'] != INSTANCE_ID:
-        res = {
-            "flag": 2,
-            "message": "param error: instance_id [{}] of request different from ENV INSTANCE_ID [{}]!"
-            .format(dict_params['instance_id'], INSTANCE_ID)
-        }
-        return jsonify(res)
+    if PLATFORM_TYPE == AI_PLATFORM:
+        if dict_params['instance_id'] != INSTANCE_ID:
+            res = {
+                "flag": 2,
+                "message": "param error: instance_id [{}] of request different from ENV INSTANCE_ID [{}]!"
+                .format(dict_params['instance_id'], INSTANCE_ID)
+            }
+            return jsonify(res)
 
     executor.submit(task_run, dict_params)
     res = {
@@ -107,13 +111,14 @@ def predict_batch():
     print('/predict/batch %s\n' % dict_params)
 
     # instance_id check
-    if dict_params['instance_id'] != INSTANCE_ID:
-        res = {
-            "flag": 2,
-            "message": "param error: instance_id [{}] of request different from ENV INSTANCE_ID [{}]!"
-                .format(dict_params['instance_id'], INSTANCE_ID)
-        }
-        return jsonify(res)
+    if PLATFORM_TYPE == AI_PLATFORM:
+        if dict_params['instance_id'] != INSTANCE_ID:
+            res = {
+                "flag": 2,
+                "message": "param error: instance_id [{}] of request different from ENV INSTANCE_ID [{}]!"
+                    .format(dict_params['instance_id'], INSTANCE_ID)
+            }
+            return jsonify(res)
 
     executor.submit(task_run, dict_params)
     res = {
@@ -135,13 +140,14 @@ def predict_multiple():
     print('/predict/multiple %s\n' % dict_params)
 
     # instance_id check
-    if dict_params['instance_id'] != INSTANCE_ID:
-        res = {
-            "flag": 2,
-            "message": "param error: instance_id [{}] of request different from ENV INSTANCE_ID [{}]!"
-                .format(dict_params['instance_id'], INSTANCE_ID)
-        }
-        return jsonify(res)
+    if PLATFORM_TYPE == AI_PLATFORM:
+        if dict_params['instance_id'] != INSTANCE_ID:
+            res = {
+                "flag": 2,
+                "message": "param error: instance_id [{}] of request different from ENV INSTANCE_ID [{}]!"
+                    .format(dict_params['instance_id'], INSTANCE_ID)
+            }
+            return jsonify(res)
 
     data = task_run(dict_params)
     res = {
