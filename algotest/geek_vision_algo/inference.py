@@ -70,7 +70,7 @@ def main(argv, test_set, model, ctx):
                     result = ctx.logResultDetails(imgPath[i], classnames[i], labels[i], round(float(conf[i]),6))
                     # predict_json = predict_classify_details(imgPath[i], classnames[i], labels[i], round(float(conf[i]),6))
                     # ctx.logResult(predict_json)
-                    data.append(result)
+                    data.extend(result)
     return data
 
 
